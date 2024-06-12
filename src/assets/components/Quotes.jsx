@@ -1,7 +1,26 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { iconDice, patternDividerDesktop, patternDividerMobile } from '../images'
 
+const API_URL = "https://api.adviceslip.com/advice"
+
 function Quotes() {
+
+    const [advice, setAdvice] = useState(null);
+
+    const displayQuotes = async () => {
+        try {
+            const response = await fetch(API_URL);
+            const data = await response.json();
+
+            setAdvice(data.slip);
+        } catch (error) {
+            console.error("Error fetching advice:", error); // Add error handling
+        }
+    }
+
+    useEffect(() => {
+        displayQuotes(); // Fetch advice on components
+    }, [])
 
     return(
 
@@ -11,13 +30,13 @@ function Quotes() {
 
                 <header>
 
-                    <h1 className='text-neonGreen uppercase text-[10px] md:text-[13px] font-manropeExtraBold tracking-[4.5px]'>advice #117</h1>
+                    <h1 className='text-neonGreen uppercase text-[10px] md:text-[13px] font-manropeExtraBold tracking-[4.5px]'>{advice ? `advice #${advice.id}` : 'Loading ...'} {/* Conditional Rendering */}</h1>
 
                 </header>
 
                 <div className='flex flex-col items-center justify-center gap-[20px]'>
 
-                    <p className='text-lightCyan text-[22px] md:text-[24px] font-manropeExtraBold'>"It is easy to sit up and take notice, what's up difficult is getting up and taking action."</p>
+                    <p className='text-lightCyan text-[22px] md:text-[24px] font-manropeExtraBold'>{advice ? `"${advice.advice}"` : 'Fetching Advice ....'} {/* Conditional Rendering */}</p>
 
                     <span>
 
@@ -34,12 +53,12 @@ function Quotes() {
 
                 <footer className='flex items-center justify-center absolute inset-x-0 top-[92%]'>
 
-                    <div className='bg-neonGreen w-fit rounded-full p-[15px] relative transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-neonGreen focus:ring-opacity-50'>
+                    <button onClick={displayQuotes} className='bg-neonGreen w-fit rounded-full p-[15px] relative transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-neonGreen focus:ring-opacity-50'>
                         
                         <span className='absolute inset-0 rounded-full bg-neonGreen opacity-0 transition-opacity duration-300 hover:opacity-100 blur-xl'></span>
                         <img src={iconDice} alt="icon dice" className='w-[30px] relative' />
 
-                    </div>
+                    </button>
 
                 </footer>
 
