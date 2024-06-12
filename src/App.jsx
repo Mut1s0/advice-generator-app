@@ -1,8 +1,11 @@
 import React from 'react'
+import { Quotes } from "./assets/components"
 
 function App() {
   return(
-    <h1>App</h1>
+    <main className='bg-darkBlue h-screen flex items-center justify-center'>
+      <Quotes />
+    </main>
   )
 }
 
